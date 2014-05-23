@@ -8,6 +8,7 @@
     },
     "staging": {},
     "master": {
+        "path": "/home/gitlab_ci_runner/ci-projects",
         "jobs": {
             "test_1": "test_1.sh",
             "deploy": "deploy-master.sh"
