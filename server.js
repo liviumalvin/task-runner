@@ -75,15 +75,14 @@
 
             if (undefined === log) {
                 log = "";
-                log += "\n[COMMITS]\n";
+                log += "\n[LAST-COMMIT]\n";
                 if (0 < req.body.commits.length) {
-                    req.body.commits.forEach(function (commit) {
-                        log += "\nAuthor: " + commit.author.name + " (" + commit.author.email + ")\n";
-                        log += "ID: " + commit.id + "\n";
-                        log += "Message: " + commit.message + "\n";
-                        log += "Timestamp: " + commit.timestamp + "\n";
-                        log += "Url: " + commit.url + "\n";
-                    });
+                    var commit = req.body.commits.shift();
+                    log += "\nAuthor: " + commit.author.name + " (" + commit.author.email + ")\n";
+                    log += "ID: " + commit.id + "\n";
+                    log += "Message: " + commit.message + "\n";
+                    log += "Timestamp: " + commit.timestamp + "\n";
+                    log += "Url: " + commit.url + "\n";
                 }
 
                 log += "\n[RUNNING CI]\n";

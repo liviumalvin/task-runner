@@ -1,8 +1,8 @@
 {
 	"smtp": {
         "host": "mail.qbyco.com",
-        "port": "587",
-        "secureConnection": "false",
+        "port": 587,
+        "secureConnection": false,
         "auth": {
             "user": "noreplay@qbyco.com",
             "pass": "noreplay"
