@@ -100,7 +100,7 @@
                         project: QbycoCI.project,
                         branch: Runner.branch,
                         commit: commit.message
-                    });
+                    })
                 };
 
                 smtpTransport.sendMail(mailOptions, function (error, response) {
