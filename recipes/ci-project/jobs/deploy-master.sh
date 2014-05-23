@@ -1,4 +1,5 @@
 #!/bin/bash
+git reset --hard HEAD
 
 echo "[MASTER] GIT fetch init"
 
