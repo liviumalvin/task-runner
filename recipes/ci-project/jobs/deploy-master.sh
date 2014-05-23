@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "[MASTER] GIT fetch init";
+echo "[MASTER] GIT fetch init"
 
-git fetch;
-git checkout master;
+git fetch
+git checkout master
 
-echo "[MASTER] GIT fetch success";
+echo "[MASTER] GIT fetch success"
