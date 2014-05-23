@@ -84,7 +84,7 @@
 
             if (0 === jobs.length) {
                 var commit;
-                
+
                 //Get last commit
                 if (0 < req.body.commits.length) {
                     commit = req.body.commits.shift();                    
@@ -96,7 +96,7 @@
                     to: config.mail.to,
                     subject: "[QbycoCI] " + "(" + Runner.branch + ")" + QbycoCI.project.toUpperCase(),
                     html: jade.renderFile(__dirname + '/emails/deploy.jade', {
-                        log: log,
+                        log: log.replace("\\n", "<br>"),
                         author: commit.author.name + " (" + commit.author.email + ")",
                         project: QbycoCI.project,
                         branch: Runner.branch,
