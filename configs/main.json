@@ -11,6 +11,10 @@
     "mail": {
     	"from" : "deployment@qbyco.com",
     	"to" : "deployment@qbyco.com"
+    },
+    "recipes": "git@git.qbyco.com:ci/machine-qbyco.git",
+    "app": {
+    	"port": "25600"
     }
 
 }

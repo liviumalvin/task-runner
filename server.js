@@ -14,20 +14,29 @@
         mailer = require('nodemailer'),
         config = require("./configs/main.json");
 
+
+    //Init smtp       
     smtpTransport = mailer.createTransport("SMTP", config.smtp);
+    
+    //Use bodyparser
     app.use(bp()); // to support JSON-encoded bodies                                                                                                                                                                                                                     
 
-    app.all("/", function (req, res) {
+
+    //Init recipes repo
+    nodeRunner("git clone " + config.recipes + " ./recipes", function (error, stdout, stderr) {
+        if (error) {
+            console.log("Recipes GIT: " + error.message);
+            return false;
+        }
+
+        console.log(stdout, stderr);
+    });
+
+    app.post("/", function (req, res) {
         var recipe,
             branch,
             QbycoCI = {},
             Runner = {};
-
-        if ("POST" !== req.method) {
-            res.write("Welcome to QbycoCI");
-            res.end();
-            return false;
-        }
 
         if ("982739mm2jf" !== req.query.token) {
             res.write("Welcome to QbycoCI");
@@ -127,7 +136,5 @@
         Runner.execute(Object.keys(Runner.jobs));
         res.end();
     });
-
-
-    app.listen(25600);
+    app.listen(config.app.port);
 }());
