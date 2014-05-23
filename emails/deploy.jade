@@ -36,22 +36,22 @@ html(lang='en')
         padding: 10px;
       }
   body
-	div.title.clearfix
-		| Project: 
-		=project
-		br
-		| Branch: 
-		=branch
-	br
-    div.author.clearfix
-		| Author: 
-		=author
+    div.title.clearfix
+      | Project:
+      =project
+      br
+      | Branch:
+      =branch
     br
     div.author.clearfix
-		| Commit:
-		div.contents
-			|
-			=commit  
+      | Author: 
+      =author
+    br
+    div.author.clearfix
+      | Commit:
+      div.contents
+        =commit  
     div.contents
-		| 
-		=log
+      | Runner output:
+      div.contents
+        =commit  
