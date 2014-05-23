@@ -12,8 +12,12 @@
         nodeRunner = require("child_process").exec,
         smtpTransport,
         mailer = require('nodemailer'),
-        config = require("./configs/main.json");
+        config = require("./configs/main.json"),
+        jade;
 
+    
+    //Setup jade
+    jade = require("jade");
 
     //Init smtp       
     smtpTransport = mailer.createTransport("SMTP", config.smtp);
@@ -75,27 +79,28 @@
 
             if (undefined === log) {
                 log = "";
-                log += "\n[LAST-COMMIT]\n";
-                if (0 < req.body.commits.length) {
-                    var commit = req.body.commits.shift();
-                    log += "\nAuthor: " + commit.author.name + " (" + commit.author.email + ")\n";
-                    log += "ID: " + commit.id + "\n";
-                    log += "Message: " + commit.message + "\n";
-                    log += "Timestamp: " + commit.timestamp + "\n";
-                    log += "Url: " + commit.url + "\n";
-                }
-
                 log += "\n[RUNNING CI]\n";
             }
 
             if (0 === jobs.length) {
+
+                //Get last commit
+                if (0 < req.body.commits.length) {
+                    commit = req.body.commits.shift();                    
+                }
 
                 //Handle output
                 var mailOptions = {
                     from: config.mail.from,
                     to: config.mail.to,
                     subject: "[QbycoCI] " + "(" + Runner.branch + ")" + QbycoCI.project.toUpperCase(),
-                    text: log
+                    html: jade.renderFile(__dirname + '/emails/deploy.jade', {
+                        log: log,
+                        author: commit.author.name + " (" + commit.author.email + ")",
+                        project: QbycoCI.project,
+                        branch: Runner.branch,
+                        commit: commit.message
+                    });
                 };
 
                 smtpTransport.sendMail(mailOptions, function (error, response) {
