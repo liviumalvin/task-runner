@@ -13,12 +13,19 @@
         smtpTransport,
         mailer = require('nodemailer'),
         config = require("./configs/main.json"),
-        jade;
+        jade,
+        jade_runtime,
+        jade_filters;
 
     
     //Setup jade
     jade = require("jade");
-
+    jade_runtime = require('./node_modules/jade/lib/runtime'),
+    jade_filters = require('./node_modules/jade/lib/filters');
+    jade_filters.nl2br = function(text) {
+      return jade_runtime.escape(text).replace(/\n/g, "<br/>");
+    }
+    
     //Init smtp       
     smtpTransport = mailer.createTransport("SMTP", config.smtp);
     
