@@ -1,0 +1,16 @@
+{
+	"dependencies": {
+		"express": ">=4.3.0",
+		"body-parser": ">=1.2.0",
+		"nodemailer": "0.6.5"
+	},
+	"name": "QbycoCI",
+	"description": "Qbyco Continuos Integration Bot",
+	"version" : "0.1.0",
+	"author": {
+		"name": "Qbyco"
+	},
+	"engines" : {
+		"node": ">= 0.10.0"
+	}
+}
