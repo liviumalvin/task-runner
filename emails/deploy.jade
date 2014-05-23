@@ -28,6 +28,7 @@ html(lang='en')
       }
       .author {
       font-size: 14px;
+      width: 100%;
       }
       .contents {
         background: black;
@@ -50,7 +51,8 @@ html(lang='en')
     div.author.clearfix
       | Commit:
       div.contents
-        =commit  
+        =commit
+    br
     div.author.clearfix
       | Runner output:
       div.contents
