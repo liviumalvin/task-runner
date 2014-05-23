@@ -11,6 +11,7 @@
         "path": "/home/gitlab_ci_runner/ci-projects",
         "jobs": {
             "test_1": "test_1.sh",
+            "test_2": "test_2.js",
             "deploy": "deploy-master.sh"
         }
     }
