@@ -45,7 +45,7 @@
         }
 
         //Set constants                                                                                                                                                                                                                                                   
-        QbycoCI.path = "/home/gitlab_ci_runner/ci-projects/";
+        QbycoCI.path = config.app.location;
         QbycoCI.project = req.query.recipe;
         QbycoCI.recipe = require(QbycoCI.path + "recipes/" + req.query.recipe + "/main.json");
         QbycoCI.branch = req.body.ref.split("/").pop();
@@ -136,5 +136,6 @@
         Runner.execute(Object.keys(Runner.jobs));
         res.end();
     });
+
     app.listen(config.app.port);
 }());
