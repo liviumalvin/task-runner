@@ -7,5 +7,10 @@
         }
     },
     "staging": {},
-    "master": {}
+    "master": {
+        "jobs": {
+            "test_1": "test_1.sh",
+            "deploy": "deploy-master.sh"
+        }
+    }
 }
