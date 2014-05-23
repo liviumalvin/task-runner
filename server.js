@@ -83,7 +83,8 @@
             }
 
             if (0 === jobs.length) {
-
+                var commit;
+                
                 //Get last commit
                 if (0 < req.body.commits.length) {
                     commit = req.body.commits.shift();                    
