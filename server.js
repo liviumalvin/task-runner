@@ -96,7 +96,7 @@
                     to: config.mail.to,
                     subject: "[QbycoCI] " + "(" + Runner.branch + ")" + QbycoCI.project.toUpperCase(),
                     html: jade.renderFile(__dirname + '/emails/deploy.jade', {
-                        log: log.replace("\n", "<br>"),
+                        log: log.replace("\n", "<br>", "g"),
                         author: commit.author.name + " (" + commit.author.email + ")",
                         project: QbycoCI.project,
                         branch: Runner.branch,
