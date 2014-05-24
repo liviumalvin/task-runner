@@ -127,15 +127,15 @@
             log += "(*)Running for " + name + " job on " + Runner.branch + "\n";
             log += " -> " + env + " " + file + "\n";
 
-            nodeRunner("cd " + Runner.path + " && pwd", function (error, stdout, stderr) {
-                nodeRunner("pwd && " + env + " " + QbycoCI.path + "recipes/" + QbycoCI.project + "/jobs/" + file, function (error, stdout, stderr) {
+            
+            nodeRunner("cd " + Runner.path + " && " + env + " " + QbycoCI.path + "recipes/" + QbycoCI.project + "/jobs/" + file, function (error, stdout, stderr) {
 
-                    log += "[STDOUT]:\n" + stdout + "\n[STDERR]\n" + stderr + "\n";
-                    
-                    //Next job
-                    Runner.execute(jobs, log);
-                });
+                log += "[STDOUT]:\n" + stdout + "\n[STDERR]\n" + stderr + "\n";
+                
+                //Next job
+                Runner.execute(jobs, log);
             });
+         
         }
 
         Runner.execute(Object.keys(Runner.jobs));
