@@ -128,18 +128,10 @@
             log += " -> " + env + " " + file + "\n";
 
             nodeRunner("cd " + Runner.path + " && pwd", function (error, stdout, stderr) {
-                nodeRunner("pwd && " + env + " " + file, {
-                    cwd: QbycoCI.path + "recipes/" + QbycoCI.project + "/jobs/"
-                }, function (error, stdout, stderr) {
+                nodeRunner("pwd && " + env + " " + QbycoCI.path + "recipes/" + QbycoCI.project + "/jobs/" + file, function (error, stdout, stderr) {
 
-                    /*if (null !== error) {
-                        //Fail
-                        log = "FAILED ON : " + env + " " + file + "\n";
-                        log += "[FATAL ERROR]" + error.description;*/
-                    //} else {
-                        log += "[STDOUT]:\n" + stdout + "\n[STDERR]\n" + stderr + "\n";
-                    //}
-
+                    log += "[STDOUT]:\n" + stdout + "\n[STDERR]\n" + stderr + "\n";
+                    
                     //Next job
                     Runner.execute(jobs, log);
                 });
