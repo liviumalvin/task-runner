@@ -135,7 +135,7 @@
                     if (null !== error) {
                         //Fail
                         log = "FAILED ON : " + env + " " + file + "\n";
-                        log += "[FATAL ERROR]" + error.message;
+                        log += "[FATAL ERROR]" + error.description;
                     } else {
                         log += "[STDOUT]:\n" + stdout + "\n[STDERR]\n" + stderr + "\n";
                     }
