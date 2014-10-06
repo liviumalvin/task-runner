@@ -61,7 +61,7 @@
         QbycoCI.recipe = require(QbycoCI.path + "recipes/" + req.query.recipe + "/main.json");
         if (undefined !== req.body.ref) {
             QbycoCI.branch = req.body.ref.split("/").pop();
-        } else if (undefined !== req.body.object_kind && "merge_request" === req.body.object_kind) {
+        } else {
             QbycoCI.branch = req.body.object_attributes.target_branch;
         }
         
