@@ -12,9 +12,20 @@
         nodeRunner = require("child_process").exec,
         smtpTransport,
         mailer = require('nodemailer'),
-        config = require("./configs/main.json");
+        config = require("./configs/main.json"),
+        jade,
+        jade_runtime,
+        jade_filters;
 
-
+    
+    //Setup jade
+    jade = require("jade");
+    jade_runtime = require('./node_modules/jade/lib/runtime'),
+    jade_filters = require('./node_modules/jade/lib/filters');
+    jade_filters.nl2br = function(text) {
+      return jade_runtime.escape(text).replace(/\n/g, "<br/>");
+    }
+    
     //Init smtp       
     smtpTransport = mailer.createTransport("SMTP", config.smtp);
     
@@ -45,11 +56,15 @@
         }
 
         //Set constants                                                                                                                                                                                                                                                   
-        QbycoCI.path = "/home/gitlab_ci_runner/ci-projects/";
+        QbycoCI.path = config.app.location;
         QbycoCI.project = req.query.recipe;
         QbycoCI.recipe = require(QbycoCI.path + "recipes/" + req.query.recipe + "/main.json");
-        QbycoCI.branch = req.body.ref.split("/").pop();
-
+        if (undefined !== req.body.ref) {
+            QbycoCI.branch = req.body.ref.split("/").pop();
+        } else if (undefined !== req.body.object_kind && "merge_request" === req.body.object_kind) {
+            QbycoCI.branch = req.body.object_attributes.target_branch;
+        }
+        
         //Handle config file
         if ("object" !== typeof QbycoCI.recipe) {
             //Fail
@@ -75,28 +90,29 @@
 
             if (undefined === log) {
                 log = "";
-                log += "\n[COMMITS]\n";
-                if (0 < req.body.commits.length) {
-                    req.body.commits.forEach(function (commit) {
-                        log += "\nAuthor: " + commit.author.name + " (" + commit.author.email + ")\n";
-                        log += "ID: " + commit.id + "\n";
-                        log += "Message: " + commit.message + "\n";
-                        log += "Timestamp: " + commit.timestamp + "\n";
-                        log += "Url: " + commit.url + "\n";
-                    });
-                }
-
                 log += "\n[RUNNING CI]\n";
             }
 
             if (0 === jobs.length) {
+                var commit;
+
+                //Get last commit
+                if (0 < req.body.commits.length) {
+                    commit = req.body.commits.shift();                    
+                }
 
                 //Handle output
                 var mailOptions = {
                     from: config.mail.from,
                     to: config.mail.to,
                     subject: "[QbycoCI] " + "(" + Runner.branch + ")" + QbycoCI.project.toUpperCase(),
-                    text: log
+                    html: jade.renderFile(QbycoCI.path + 'emails/deploy.jade', {
+                        log: log.replace(/\n/g, "<br/>"),
+                        author: commit.author.name + " (" + commit.author.email + ")",
+                        project: QbycoCI.project,
+                        branch: Runner.branch,
+                        commit: commit.message
+                    })
                 };
 
                 smtpTransport.sendMail(mailOptions, function (error, response) {
@@ -115,26 +131,20 @@
             log += "(*)Running for " + name + " job on " + Runner.branch + "\n";
             log += " -> " + env + " " + file + "\n";
 
-            nodeRunner("cd " + Runner.path + " && pwd", function (error, stdout, stderr) {
-                nodeRunner(env + " " + file, {
-                    cwd: QbycoCI.path + "recipes/" + QbycoCI.project + "/jobs/"
-                }, function (error, stdout, stderr) {
+            
+            nodeRunner("cd " + Runner.path + " && " + env + " " + QbycoCI.path + "recipes/" + QbycoCI.project + "/jobs/" + file, function (error, stdout, stderr) {
 
-                    if (null !== error) {
-                        //Fail
-                        log = "[FATAL ERROR]" + error.message;
-                    } else {
-                        log += "[STDOUT]:\n" + stdout + "\n[STDERR]\n" + stderr + "\n";
-                    }
-
-                    //Next job
-                    Runner.execute(jobs, log);
-                });
+                log += "[STDOUT]:\n" + stdout + "\n[STDERR]\n" + stderr + "\n";
+                
+                //Next job
+                Runner.execute(jobs, log);
             });
+         
         }
 
         Runner.execute(Object.keys(Runner.jobs));
         res.end();
     });
+
     app.listen(config.app.port);
 }());
