@@ -15,7 +15,7 @@
     "recipes": "git@git.qbyco.com:ci/machine-qbyco.git",
     "app": {
     	"port": "25600",
-        "location": "/home/gitlab_ci_runner/QbycoCI"
+        "location": "/home/gitlab_ci_runner/QbycoCI/"
     }
 
 }
