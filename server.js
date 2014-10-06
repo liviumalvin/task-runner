@@ -95,14 +95,6 @@
             }
 
             if (0 === jobs.length) {
-
-                console.log("");
-                console.log("");
-                console.log("");
-                console.log(log);
-                console.log("=====");
-                console.log("");
-                console.log("");
                 var commit;
 
                 //Get last commit
