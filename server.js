@@ -59,6 +59,7 @@
         QbycoCI.path = config.app.location;
         QbycoCI.project = req.query.recipe;
         QbycoCI.recipe = require(QbycoCI.path + "recipes/" + req.query.recipe + "/main.json");
+        
         if (undefined !== req.body.ref) {
             QbycoCI.branch = req.body.ref.split("/").pop();
         } else {
@@ -94,6 +95,13 @@
             }
 
             if (0 === jobs.length) {
+                console.log("");
+                console.log("");
+                console.log("");
+                console.log(log);
+                console.log("=====");
+                console.log("");
+                console.log("");
                 var commit;
 
                 //Get last commit
