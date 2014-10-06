@@ -96,12 +96,22 @@
 
             if (0 === jobs.length) {
                 var commit;
-
-                //Get last commit
-                if (0 < req.body.commits.length) {
-                    commit = req.body.commits.shift();                    
+                
+                if (undefined !== req.body.commits) {
+                    //Get last commit
+                    if (0 < req.body.commits.length) {
+                        commit = req.body.commits.shift();                    
+                    }
+                    
+                } else {
+                    commit = {
+                        author: {
+                            name: "System",
+                            email: "admin@qbyco.com"
+                        },
+                        message: "Merged"
+                    }
                 }
-
                 //Handle output
                 var mailOptions = {
                     from: config.mail.from,
