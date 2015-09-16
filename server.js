@@ -24,36 +24,37 @@
     jade_filters = require('./node_modules/jade/lib/filters');
     jade_filters.nl2br = function(text) {
       return jade_runtime.escape(text).replace(/\n/g, "<br/>");
-    }
+    };
     
     //Init smtp       
     smtpTransport = mailer.createTransport("SMTP", config.smtp);
     
     //Use bodyparser
-    app.use(bp()); // to support JSON-encoded bodies                                                                                                                                                                                                                     
+    app.use(bp.json()); // to support JSON-encoded bodies
 
 
     //Init recipes repo
-    nodeRunner("git clone " + config.recipes + " ./recipes", function (error, stdout, stderr) {
+    /*nodeRunner("git clone " + config.recipes + " ./recipes", function (error, stdout, stderr) {
         if (error) {
             console.log("Recipes GIT: " + error.message);
             return false;
         }
 
         console.log(stdout, stderr);
-    });
+    });*/
 
     app.post("/", function (req, res) {
         var recipe,
             branch,
             QbycoCI = {},
             Runner = {};
-
-        if ("982739mm2jf" !== req.query.token) {
+        console.log(req.body);
+        return;
+        /*if ("982739mm2jf" !== req.query.token) {
             res.write("Welcome to QbycoCI");
             res.end();
             return false;
-        }
+        }*/
 
         //Set constants                                                                                                                                                                                                                                                   
         QbycoCI.path = config.app.location;
