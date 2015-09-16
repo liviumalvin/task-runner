@@ -1,12 +1,11 @@
 /**
  * Gitlab hook responder
- * @author Cornita Liviu <lcornita@marketstheworld.com>
+ * @author Cornita Liviu <cornita.liviu@yahoo.com>
  *
  * This server should:
  *
  * respond to gitlab hooks using an http server
- *
- *
+ * call a default set of recipes based on the given namespace
  */
 var App = require("./core.js"),
     Config = require("./configs/main.json"),
@@ -19,6 +18,9 @@ var App = require("./core.js"),
  */
 Events = new Events();
 
+/**
+ * Share resources
+ */
 App.shareResource('events', Events);
 App.shareResource('config', Config);
 App.shareResource('app', App);
@@ -26,10 +28,20 @@ App.shareResource('storage', Storage);
 App.shareResource('data', Data);
 App.shareResource('http', App.tasks.add("createHttpResponder"));
 
-//Testing purposes only
-/*App.shareResource('request', require('./req.json'));*/
+/**
+ * Bounce events
+ */
+Events.on("authorization.finished", function (auth) {
+    if (auth) {
+        Events.emit("resolve.namespace");
+    }
+});
 
+/**
+ * Register system tasks
+ */
 App.tasks.run("getRequestInfo");
+App.tasks.run("setNamespaceResolver");
 App.tasks.run("setHttpRoutes");
 App.tasks.run("createHttpResponder");
 

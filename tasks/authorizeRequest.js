@@ -12,15 +12,17 @@
             lib.data.should.have.property('token');
             lib.should.have.property('config');
 
-            lib.config.should.have.property('authToken');
+            lib.config.should.have.property('auth');
 
             try {
-                lib.config.authToken.should.equal(lib.data.token);
+                lib.config.auth.should.equal(lib.data.token);
                 lib.data.auth = true;
             } catch (e) {
                 lib.data.auth = false;
                 throw e;
             }
+
+            lib.events.emit("authorization.finished", lib.data.auth);
         }
     };
 }());

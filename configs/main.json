@@ -12,7 +12,7 @@
     	"from" : "deployment@qbyco.com",
     	"to" : "deployment@qbyco.com"
     },
-    "authToken": "ajd89j289jf29n9fn29n449292y3hfgbfjm",
+    "auth": "ajd89j289jf29n9fn29n449292y3hfgbfjm",
     "recipes": "git@git.qbyco.com:ci/machine-qbyco.git",
     "app": {
     	"port": "25600",

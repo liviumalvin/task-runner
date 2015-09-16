@@ -31,6 +31,7 @@
      */
     Server.run = function (lib) {
         this.lib = lib;
+
         this.checkLibDependencies();
 
         //listen on port
