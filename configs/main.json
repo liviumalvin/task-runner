@@ -7,8 +7,7 @@
       }
     ],
     "app": {
-    	"port": "25600",
-        "location": "/home/gitlab_ci_runner/QbycoCI/"
+    	"port": "25600"
     }
 
 }
