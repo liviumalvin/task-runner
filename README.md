@@ -1,5 +1,5 @@
-## Qbyco CI
-###### v 0.1.0
+## CI Runner
+###### v 1.0-beta
 -------------------------
 TODO documentation
 * To be added

@@ -11,7 +11,9 @@ var App = require("./core.js"),
     Config = require("./configs/main.json"),
     Events = require('events'),
     Data = {},
-    Storage = {};
+    Storage = {
+        log: []
+    };
 
 /**
  * Create events instance
@@ -23,9 +25,11 @@ Events = new Events();
  */
 App.shareResource('events', Events);
 App.shareResource('config', Config);
+App.shareResource('_', require("lodash"));
 App.shareResource('app', App);
 App.shareResource('storage', Storage);
 App.shareResource('data', Data);
+App.shareResource('exec', require("child_process").exec);
 App.shareResource('http', App.tasks.add("createHttpResponder"));
 
 /**
@@ -40,10 +44,14 @@ Events.on("authorization.finished", function (auth) {
 /**
  * Register system tasks
  */
+App.tasks.run("fetchNamespaceRecipes");
 App.tasks.run("getRequestInfo");
 App.tasks.run("setNamespaceResolver");
+App.tasks.run("setNamespaceInstaller");
 App.tasks.run("setHttpRoutes");
 App.tasks.run("createHttpResponder");
+
+
 
 
 

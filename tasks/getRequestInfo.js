@@ -1,6 +1,18 @@
 (function () {
     var Task = {
-        lib: {}
+            lib: {}
+        },
+        slugify;
+
+
+    slugify = function slugify(text) {
+
+        return text.toString().toLowerCase()
+            .replace(/\s+/g, '-')        // Replace spaces with -
+            .replace(/[^\w\-]+/g, '-')   // Remove all non-word chars
+            .replace(/\-\-+/g, '-')      // Replace multiple - with single -
+            .replace(/^-+/, '')          // Trim - from start of text
+            .replace(/-+$/, '');         // Trim - from end of text
     };
 
     /**
@@ -21,16 +33,70 @@
     };
 
     /**
+     * Get the branch name
+     */
+    Task.getBranchName = function () {
+        var branch;
+        try {
+            this.lib.request.body.should.have.property("ref");
+            branch = this.lib.request.body.ref.split("refs/heads/").pop();
+        } catch (e) {
+            //@todo is there any other way of reading branch names?
+        }
+
+        this.lib.data.branch = {
+            slug : slugify(branch),
+            name : branch
+        };
+    };
+
+    /**
+     * Retrieves the last relevant commit
+     */
+    Task.getCommit = function () {
+        var commits = [];
+
+        try {
+            this.lib.request.body.should.have.property("commits");
+            commits = this.lib.request.body.commits;
+        } catch (e) {
+            //@todo no commits at all? why did the hook trigger?
+        }
+
+        //Filter the ones that are meant to be deployed
+        commits = commits.filter(function (item) {
+            return (-1 !== item.message.substr(0,3).indexOf("[D]"))
+        });
+
+        if (1 <= commits.length) {
+            this.lib.data.commit = commits.pop(); // get the last one. After all, this one should contain latest things.
+        }
+    };
+
+    /**
+     * Store repo info
+     */
+    Task.getRepoData = function () {
+        this.lib.data.repository =  this.lib.request.body.repository;
+    };
+
+    /**
      * Process the received data
      */
     Task.processData = function () {
 
         this.checkRequestStructure();
+        this.getBranchName();
+        this.getCommit();
+        this.getRepoData();
 
         this.lib.data.namespace = this.lib.request.query.namespace;
         this.lib.data.token     = this.lib.request.query.token;
 
-        this.lib.app.tasks.run("authorizeRequest");
+        //if there is any commit which should be deployed, launch the authorization process
+        if (this.lib._.has(this.lib.data, 'commit')) {
+            this.lib.app.tasks.run("authorizeRequest");
+        }
 
     };
 

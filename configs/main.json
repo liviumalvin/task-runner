@@ -1,19 +1,11 @@
 {
-	"smtp": {
-        "host": "mail.qbyco.com",
-        "port": 587,
-        "secureConnection": false,
-        "auth": {
-            "user": "noreplay@qbyco.com",
-            "pass": "noreplay"
-        }
-    },
-    "mail": {
-    	"from" : "deployment@qbyco.com",
-    	"to" : "deployment@qbyco.com"
-    },
     "auth": "ajd89j289jf29n9fn29n449292y3hfgbfjm",
-    "recipes": "git@git.qbyco.com:ci/machine-qbyco.git",
+    "namespaces": [
+      {
+        "name" : "mwd",
+        "url" : "git@gitlab:mwd/mwd-ci-recipes.git"
+      }
+    ],
     "app": {
     	"port": "25600",
         "location": "/home/gitlab_ci_runner/QbycoCI/"

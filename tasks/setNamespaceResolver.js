@@ -21,10 +21,15 @@
             FS.statSync(this.getNamespacePath());
             FS.statSync(this.getNamespacePath() + "/install");
             FS.statSync(this.getNamespacePath() + "/deploy");
-            FS.statSync(this.getNamespacePath() + "/recipes");
+            FS.statSync(this.getNamespacePath() + "/post-deploy");
 
-            this.events.emit("namespace.resolved");
+            FS.statSync(this.getNamespacePath() + "/install/jobs.json");
+            FS.statSync(this.getNamespacePath() + "/deploy/jobs.json");
+            FS.statSync(this.getNamespacePath() + "/post-deploy/jobs.json");
+
+            this.lib.events.emit("namespace.resolved");
         } catch (e) {
+            console.error(e);
             //The namespace cannot be resolved
             //silently ignore everything
             //@todo maybe some logging would be a good idea
