@@ -25,11 +25,13 @@ Events = new Events();
  */
 App.shareResource('events', Events);
 App.shareResource('config', Config);
-App.shareResource('_', require("lodash"));
 App.shareResource('app', App);
 App.shareResource('storage', Storage);
 App.shareResource('data', Data);
+
+App.shareResource('_', require("lodash"));
 App.shareResource('exec', require("child_process").exec);
+
 App.shareResource('http', App.tasks.add("createHttpResponder"));
 
 /**
