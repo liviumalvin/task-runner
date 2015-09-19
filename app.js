@@ -18,7 +18,8 @@ var App = require("./core.js"),
 /**
  * Create events instance
  */
-Events = new Events();
+
+Events = new Events.EventEmitter();
 
 /**
  * Share resources
@@ -43,6 +44,10 @@ Events.on("authorization.finished", function (auth) {
     }
 });
 
+Events.on("namespace.installed", function (log) {
+    console.log(log.join("\r\n"));
+});
+
 /**
  * Register system tasks
  */
@@ -50,6 +55,8 @@ App.tasks.run("fetchNamespaceRecipes");
 App.tasks.run("getRequestInfo");
 App.tasks.run("setNamespaceResolver");
 App.tasks.run("setNamespaceInstaller");
+App.tasks.run("setNamespaceDeployer");
+App.tasks.run("setNamespacePostDeployer");
 App.tasks.run("setHttpRoutes");
 App.tasks.run("createHttpResponder");
 
