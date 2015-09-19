@@ -44,19 +44,24 @@ Events.on("authorization.finished", function (auth) {
     }
 });
 
-Events.on("namespace.installed", function (log) {
-    console.log(log.join("\r\n"));
+Events.on("namespace.finished", function () {
+    //Do something with the log
 });
 
 /**
  * Register system tasks
  */
 App.tasks.run("fetchNamespaceRecipes");
+
+//Gitlab @todo please move this to a separate controller
 App.tasks.run("getRequestInfo");
 App.tasks.run("setNamespaceResolver");
 App.tasks.run("setNamespaceInstaller");
 App.tasks.run("setNamespaceDeployer");
 App.tasks.run("setNamespacePostDeployer");
+
+//App related
+App.tasks.run('recipesWatcher')
 App.tasks.run("setHttpRoutes");
 App.tasks.run("createHttpResponder");
 

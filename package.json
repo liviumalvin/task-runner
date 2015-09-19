@@ -3,7 +3,8 @@
 		"express": ">=4.3.0",
 		"body-parser": ">=1.2.0",
 	  	"should": "latest",
-		"lodash": "latest"
+		"lodash": "latest",
+		"nl2br" : "latest"
 	},
 	"name": "CI.Runner",
 	"description": "Continuos Integration Bot",

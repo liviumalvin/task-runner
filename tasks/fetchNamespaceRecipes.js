@@ -39,38 +39,41 @@
     };
 
     Task.fetchNamespaces = function () {
-        var namespaces;
+        var namespace;
 
-        namespaces = this.lib.config.namespaces;
-        if (0 < namespaces.length) {
+        if (0 === this.namespaces.length) {
+            this.lib.events.emit("recipes.updated", {});
+        }
 
-            namespaces.forEach(function (namespace) {
-                try {
-                    FS.statSync(Task.getNamespacePath(namespace.name));
-                    Task.action = "update";
-                } catch (e){
-                    Task.action = "clone";
-                }
+        namespace = this.namespaces.shift();
 
-                Task.run(namespace);
-            });
+        if (undefined !== namespace) {
+            try {
+                FS.statSync(Task.getNamespacePath(namespace.name));
+                Task.action = "update";
+            } catch (e){
+                Task.action = "clone";
+            }
+
+            Task.run(namespace);
         }
     };
 
-
+    /**
+     * Run the namespace installation
+     * @param namespace
+     */
     Task.run = function (namespace) {
 
         Task.lib.storage.log.push(" ---> [Fetching namespace:  " + namespace.name + "]");
         this.lib.exec(this.getNamespaceCommand(namespace), function (error, stdout, stderr) {
 
-            if (error) {
-                Task.lib.storage.log.push("[ERROR]: \r\n" + error.toString());
-            }
-
             Task.lib.storage.log.push("[STDOUT]: \r\n" + stdout);
             Task.lib.storage.log.push("[STDERR]: \r\n" + stderr);
             Task.lib.storage.log.push("-------------END-----------------");
             Task.lib.storage.log.push("");
+
+            Task.fetchNamespaces();
 
         });
     };
@@ -80,8 +83,11 @@
      * @param lib
      */
     module.exports.run = function (lib) {
+
         Task.lib = lib;
         lib.should.have.property("config");
+
+        Task.namespaces = JSON.parse(JSON.stringify(Task.lib.config.namespaces));
         Task.fetchNamespaces();
     };
 

@@ -25,6 +25,16 @@
         }
     });
 
+    Router.push({
+        route: "/recipes/update",
+        type: "get",
+        handler: function (lib, request, response) {
+            lib.events.emit('recipes.update', {
+                request: request,
+                response: response
+            });
+        }
+    });
 
     /**
      * Public by facade
