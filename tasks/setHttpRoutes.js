@@ -36,21 +36,6 @@
         }
     });
 
-    Router.push({
-        route: "/log",
-        type: "get",
-        handler: function (lib, request, response) {
-            var nl2br;
-
-            nl2br = require('nl2br');
-
-            response.setHeader("Content-Type", "text/html");
-            response.write("Last log: ");
-            response.write(nl2br(lib.storage.log.join("<br/>")));
-            response.end();
-        }
-    });
-
     /**
      * Public by facade
      * @param lib

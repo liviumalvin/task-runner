@@ -16,6 +16,14 @@
      * Tries to resolve the namespace
      */
     Task.run = function () {
+
+        this.lib.rollbar.reportMessageWithPayloadData("Trying to resolve a namespace", {
+            level: "debug",
+            custom: {
+                namespace: this.lib.data.namespace
+            }
+        });
+
         try {
 
             FS.statSync(this.getNamespacePath());
@@ -29,10 +37,13 @@
 
             this.lib.events.emit("namespace.resolved");
         } catch (e) {
-            console.error(e);
-            //The namespace cannot be resolved
-            //silently ignore everything
-            //@todo maybe some logging would be a good idea
+
+            this.lib.rollbar.handleErrorWithPayloadData("Namespace not resolved due to inconsistent folder/file structure", {
+                level: "warning",
+                custom: {
+                    error: e
+                }
+            });
         }
     };
 
