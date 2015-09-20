@@ -52,6 +52,7 @@
             file,
             env;
 
+
         if (undefined === log) {
             log = [];
             log.push(" ");

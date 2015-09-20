@@ -12,7 +12,8 @@ var App = require("./core.js"),
     Events = require('events'),
     Data = {},
     Storage = {
-        log: []
+        log: [],
+        lastRunningLog: ""
     };
 
 /**
@@ -44,10 +45,6 @@ Events.on("authorization.finished", function (auth) {
     }
 });
 
-Events.on("namespace.finished", function () {
-    //Do something with the log
-});
-
 /**
  * Register system tasks
  */
@@ -61,7 +58,7 @@ App.tasks.run("setNamespaceDeployer");
 App.tasks.run("setNamespacePostDeployer");
 
 //App related
-App.tasks.run('recipesWatcher')
+App.tasks.run('recipesWatcher');
 App.tasks.run("setHttpRoutes");
 App.tasks.run("createHttpResponder");
 
