@@ -105,7 +105,8 @@
 
         //When finish, store the log please
         this.lib.events.once("namespace.deployed", function (log) {
-            Task.lib.storage.log.concat(log);
+            Task.lib.storage.log.push(log.join("\r\n"));
+            Task.lib.storage.log.push("Namespace deployed. Starting post-deploy");
         });
 
         //Execute if any jobs

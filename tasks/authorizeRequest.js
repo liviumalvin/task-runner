@@ -18,6 +18,7 @@
                 lib.config.auth.should.equal(lib.data.token);
                 lib.data.auth = true;
             } catch (e) {
+                lib.storage.log.push("Authorization failed. Stopping.");
                 lib.data.auth = false;
                 throw e;
             }
