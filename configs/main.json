@@ -3,8 +3,8 @@
     "rollbar": {
       "token": "7c2a8636f92f4362b0e6e70a44cdc6ea",
       "options": {
-        "branch": "master",
-        "environment": "mwd.deployer"
+        "branch": "upstream/upstream-qbyco-config",
+        "environment": "qbyco.host"
       }
     },
     "namespaces": [
