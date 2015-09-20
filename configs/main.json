@@ -2,8 +2,8 @@
     "auth": "ajd89j289jf29n9fn29n449292y3hfgbfjm",
     "namespaces": [
       {
-        "name" : "mwd",
-        "url" : "git@gitlab:mwd/mwd-ci-recipes.git"
+        "name" : "reverseproxy",
+        "url" : "ssh://git@git.qbyco.ro:2200/qbyco-ci/namespace-reverseproxy.git"
       }
     ],
     "app": {
