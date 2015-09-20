@@ -104,13 +104,7 @@
 
         //When finish, store the log please
         this.lib.events.once("namespace.finished", function (log) {
-            var nl2br;
-
-            Task.lib.storage.log.concat(log);
-            nl2br = require("nl2br");
-
-            //Do something with the log
-            Task.lib.storage.lastRunningLog = nl2br(Task.lib.storage.log.join("<br/>"));
+            console.log(Task.lib.storage.log);
         });
 
         //Execute if any jobs

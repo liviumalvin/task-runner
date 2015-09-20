@@ -95,6 +95,7 @@
 
         //if there is any commit which should be deployed, launch the authorization process
         if (this.lib._.has(this.lib.data, 'commit')) {
+            this.lib.storage.log.push("Requested a new deploy. Authorizing...");
             this.lib.app.tasks.run("authorizeRequest");
         }
 
