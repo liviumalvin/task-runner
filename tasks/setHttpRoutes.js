@@ -36,6 +36,17 @@
         }
     });
 
+    Router.push({
+        route: "/log",
+        type: "get",
+        handler: function (lib, request, response) {
+            response.setHeader("Content-Type", "text/html");
+            response.write("Last log: ");
+            response.write(lib.storage.lastRunningLog);
+            response.end(lib.storage.lastRunningLog);
+        }
+    });
+
     /**
      * Public by facade
      * @param lib
