@@ -18,10 +18,12 @@
                 lib.config.auth.should.equal(lib.data.token);
                 lib.data.auth = true;
             } catch (e) {
+                lib.storage.log.push("Authorization failed. Stopping.");
                 lib.data.auth = false;
                 throw e;
             }
 
+            lib.storage.log.push("Authorized. Starting the namespace deployment process");
             lib.events.emit("authorization.finished", lib.data.auth);
         }
     };

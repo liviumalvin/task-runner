@@ -104,7 +104,8 @@
 
         //When finish, store the log please
         this.lib.events.once("namespace.finished", function (log) {
-            console.log(Task.lib.storage.log);
+            Task.lib.storage.log.push(log.join("\r\n"));
+            Task.lib.storage.log.push("Namespace finished.");
         });
 
         //Execute if any jobs

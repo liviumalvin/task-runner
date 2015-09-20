@@ -68,7 +68,7 @@
             return (-1 !== item.message.substr(0,3).indexOf("[D]"))
         });
 
-        if (1 <= commits.length) {
+        if (0 < commits.length) {
             this.lib.data.commit = commits.pop(); // get the last one. After all, this one should contain latest things.
         }
     };

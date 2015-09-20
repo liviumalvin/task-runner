@@ -104,7 +104,8 @@
 
         //When finish, store the log please
         this.lib.events.once("namespace.installed", function (log) {
-            Task.lib.storage.log.concat(log);
+            Task.lib.storage.log.push(log.join("\r\n"));
+            Task.lib.storage.log.push("Namespace install. Starting deploy");
         });
 
         //Execute if any jobs
@@ -120,6 +121,7 @@
         this.lib.should.have.property("events");
 
         this.lib.events.on("namespace.resolved", function () {
+            Task.lib.storage.log.push("Namespace resolved. Starting install");
             Task.run();
         });
     };
