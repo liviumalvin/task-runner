@@ -22,6 +22,7 @@
                 throw e;
             }
 
+            lib.storage.log.push("Authorized. Starting the namespace deployment process");
             lib.events.emit("authorization.finished", lib.data.auth);
         }
     };
