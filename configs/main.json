@@ -1,5 +1,12 @@
 {
     "auth": "ajd89j289jf29n9fn29n449292y3hfgbfjm",
+    "rollbar": {
+      "token": "7c2a8636f92f4362b0e6e70a44cdc6ea",
+      "options": {
+        "branch": "master",
+        "environment": "mwd.deployer"
+      }
+    },
     "namespaces": [
       {
         "name" : "reverseproxy",

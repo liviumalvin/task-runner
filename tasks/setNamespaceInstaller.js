@@ -53,16 +53,24 @@
             env;
 
         if (undefined === log) {
-            log = [];
-            log.push(" ");
-            log.push("=========Running namespace installer==========");
-            log.push(" ");
-
+            this.lib.rollbar.reportMessageWithPayloadData("Starting the namespace installation process...", {
+                level: "debug",
+                custom: {
+                    namespace: this.lib.data.namespace
+                }
+            });
+            log = true;
         }
 
         if (0 === jobs.length) {
             //Finish
-            this.lib.events.emit("namespace.installed", log);
+            this.lib.rollbar.reportMessageWithPayloadData("Finished installing the namespace", {
+                level: "debug",
+                custom: {
+                    namespace: this.lib.data.namespace
+                }
+            });
+            this.lib.events.emit("namespace.installed");
             return true;
         }
 
@@ -70,17 +78,26 @@
         file = job.file;
         env = job.env;
 
-        log.push("------------> [JOB: " + job.name + "]");
+
+        this.lib.rollbar.reportMessageWithPayloadData("[" + job.name + "] Running installation queued job .Waiting for it to end...", {
+            level: "debug",
+            custom: {
+                namespace: this.lib.data.namespace,
+                job: job
+            }
+        });
+
         this.lib.exec(env + " " + this.getNamespaceInstallerPath() + "/" + file + " " + this.getJobParams(job.params), function (error, stdout, stderr) {
 
-            if (error) {
-                log.push("[ERROR]: \r\n" + error.toString());
-            }
-
-            log.push("[STDOUT]: \r\n" + stdout);
-            log.push("[STDERR]: \r\n" + stderr);
-            log.push("<-----------------");
-            log.push("");
+            Task.lib.rollbar.reportMessageWithPayloadData("[" + job.name + "] Job ended", {
+                level: "debug",
+                custom: {
+                    namespace: Task.lib.data.namespace,
+                    job: job,
+                    stderr: stderr,
+                    stdout: stdout
+                }
+            });
 
             //Next job
             Task.execJob(jobs, log);
@@ -102,12 +119,6 @@
         delete require.cache[path.resolve(jsonJobs)];
         this.jobs = require(jsonJobs);
 
-        //When finish, store the log please
-        this.lib.events.once("namespace.installed", function (log) {
-            Task.lib.storage.log.push(log.join("\r\n"));
-            Task.lib.storage.log.push("Namespace install. Starting deploy");
-        });
-
         //Execute if any jobs
         this.execJob(this.jobs);
     };
@@ -121,7 +132,14 @@
         this.lib.should.have.property("events");
 
         this.lib.events.on("namespace.resolved", function () {
-            Task.lib.storage.log.push("Namespace resolved. Starting install");
+
+            Task.lib.rollbar.reportMessageWithPayloadData("Namespace was resolved OK", {
+                level: "debug",
+                custom: {
+                    namespace: Task.lib.data.namespace
+                }
+            });
+
             Task.run();
         });
     };

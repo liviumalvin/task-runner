@@ -65,13 +65,24 @@
      */
     Task.run = function (namespace) {
 
-        Task.lib.storage.log.push(" ---> [Fetching namespace:  " + namespace.name + "]");
+        this.lib.rollbar.reportMessageWithPayloadData("[" + namespace.name + "]Fetching namespace recipes", {
+            level: "debug",
+            custom: {
+                namespace: namespace
+            }
+        });
+
         this.lib.exec(this.getNamespaceCommand(namespace), function (error, stdout, stderr) {
 
-            Task.lib.storage.log.push("[STDOUT]: \r\n" + stdout);
-            Task.lib.storage.log.push("[STDERR]: \r\n" + stderr);
-            Task.lib.storage.log.push("-------------END-----------------");
-            Task.lib.storage.log.push("");
+            Task.lib.rollbar.reportMessageWithPayloadData("[" + namespace.name + "] Recipes fetched", {
+                level: "debug",
+                custom: {
+                    stdout: stdout,
+                    stderr: stderr,
+                    error: error,
+                    namespace: namespace,
+                }
+            });
 
             Task.fetchNamespaces();
 

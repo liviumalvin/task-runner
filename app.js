@@ -10,11 +10,17 @@
 var App = require("./core.js"),
     Config = require("./configs/main.json"),
     Events = require('events'),
+    Rollbar = require('rollbar'),
     Data = {},
     Storage = {
         log: [],
         lastRunningLog: ""
     };
+
+/**
+ * Rollbar init
+ */
+Rollbar.init(Config.rollbar.token, Config.rollbar.options);
 
 /**
  * Create events instance
@@ -30,20 +36,12 @@ App.shareResource('config', Config);
 App.shareResource('app', App);
 App.shareResource('storage', Storage);
 App.shareResource('data', Data);
+App.shareResource('rollbar', Rollbar);
 
 App.shareResource('_', require("lodash"));
 App.shareResource('exec', require("child_process").exec);
 
 App.shareResource('http', App.tasks.add("createHttpResponder"));
-
-/**
- * Bounce events
- */
-Events.on("authorization.finished", function (auth) {
-    if (auth) {
-        Events.emit("resolve.namespace");
-    }
-});
 
 /**
  * Register system tasks
