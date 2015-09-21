@@ -66,7 +66,6 @@ process.on("uncaughtException", function (error) {
         level: "critical",
         custom: {
             error: error.message,
-
         }
     });
 });
