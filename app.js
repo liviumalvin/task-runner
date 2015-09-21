@@ -60,6 +60,17 @@ App.tasks.run('recipesWatcher');
 App.tasks.run("setHttpRoutes");
 App.tasks.run("createHttpResponder");
 
+//Handle uncaught
+process.on("uncaughtException", function (error) {
+    Rollbar.reportMessageWithPayloadData("An uncaught exception was finally caught: " + error.toString(), {
+        level: "critical",
+        custom: {
+            error: error.message,
+
+        }
+    });
+});
+
 
 
 
