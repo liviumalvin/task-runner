@@ -87,7 +87,7 @@
             }
         });
 
-        this.lib.exec("cd " + this.getNamespaceInstallerPath() + " " + env + " " + file + " " + this.getJobParams(job.params), function (error, stdout, stderr) {
+        this.lib.exec("cd " + this.getNamespaceInstallerPath() + " && " + env + " " + file + " " + this.getJobParams(job.params), function (error, stdout, stderr) {
 
             Task.lib.rollbar.reportMessageWithPayloadData("[" + job.name + "] Job ended", {
                 level: "debug",
