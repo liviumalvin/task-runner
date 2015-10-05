@@ -18,6 +18,7 @@
         route: "/",
         type: "post",
         handler: function (lib, request, response) {
+            lib.babylog.capture();
             lib.events.emit('gitlab.hook', {
                 request: request,
                 response: response
@@ -29,6 +30,7 @@
         route: "/recipes/update",
         type: "get",
         handler: function (lib, request, response) {
+            lib.babylog.capture();
             lib.events.emit('recipes.update', {
                 request: request,
                 response: response

@@ -17,12 +17,7 @@
      */
     Task.run = function () {
 
-        this.lib.rollbar.reportMessageWithPayloadData("Trying to resolve a namespace", {
-            level: "debug",
-            custom: {
-                namespace: this.lib.data.namespace
-            }
-        });
+        this.lib.babylog.debug("Trying to resolve a namespace");
 
         try {
 
@@ -38,12 +33,7 @@
             this.lib.events.emit("namespace.resolved");
         } catch (e) {
 
-            this.lib.rollbar.handleErrorWithPayloadData("Namespace not resolved due to inconsistent folder/file structure", {
-                level: "warning",
-                custom: {
-                    error: e
-                }
-            });
+            this.lib.babylog.warning("Namespace not resolved due to inconsistent folder/file structure");
         }
     };
 

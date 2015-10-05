@@ -37,7 +37,7 @@
             //Nothing to do here. move on
         }
 
-        return "'" + query.join("' '") + "'";
+        return query;
     };
 
     /**
@@ -47,29 +47,20 @@
      * @returns {boolean}
      */
     Task.execJob = function (jobs, log) {
-
         var job,
             file,
-            env;
+            env,
+            installTask,
+            installCommand;
 
         if (undefined === log) {
-            this.lib.rollbar.reportMessageWithPayloadData("Starting the namespace installation process...", {
-                level: "debug",
-                custom: {
-                    namespace: this.lib.data.namespace
-                }
-            });
+            this.lib.babylog.debug("Starting the namespace installation process...");
             log = true;
         }
 
         if (0 === jobs.length) {
             //Finish
-            this.lib.rollbar.reportMessageWithPayloadData("Finished installing the namespace", {
-                level: "debug",
-                custom: {
-                    namespace: this.lib.data.namespace
-                }
-            });
+            this.lib.babylog.debug("Finished installing the namespace");
             this.lib.events.emit("namespace.installed");
             return true;
         }
@@ -79,30 +70,28 @@
         env = job.env;
 
 
-        this.lib.rollbar.reportMessageWithPayloadData("[" + job.name + "] Running installation queued job .Waiting for it to end...", {
-            level: "debug",
-            custom: {
-                namespace: this.lib.data.namespace,
-                job: job
-            }
+        installTask = this.lib.babylog.createTask('nsInstallerTask', "[" + job.name + "]");
+        installCommand = this.lib.spawn(env, [file].concat(this.getJobParams(job.params)), {
+            cwd: this.getNamespaceInstallerPath()
         });
 
-        this.lib.exec("cd " + this.getNamespaceInstallerPath() + " && " + env + " " + file + " " + this.getJobParams(job.params), function (error, stdout, stderr) {
-
-            Task.lib.rollbar.reportMessageWithPayloadData("[" + job.name + "] Job ended", {
-                level: "debug",
-                custom: {
-                    namespace: Task.lib.data.namespace,
-                    job: job,
-                    stderr: stderr,
-                    stdout: stdout
-                }
-            });
-
-            //Next job
-            Task.execJob(jobs, log);
+        installCommand.on("error", function (error) {
+            installTask.setData(error.toString());
+            installTask.end();
         });
 
+        installCommand.stdout.on("data", function (message) {
+            installTask.feed("STDOUT: " + message);
+        });
+
+        installCommand.stderr.on("data", function (message) {
+            installTask.feed("STDERR: " + message);
+        });
+
+        installCommand.on("close", function (code) {
+            installTask.end();
+            Task.execJob(jobs);
+        });
     };
 
     /**
@@ -132,14 +121,7 @@
         this.lib.should.have.property("events");
 
         this.lib.events.on("namespace.resolved", function () {
-
-            Task.lib.rollbar.reportMessageWithPayloadData("Namespace was resolved OK", {
-                level: "debug",
-                custom: {
-                    namespace: Task.lib.data.namespace
-                }
-            });
-
+            Task.lib.babylog.debug("Namespace was resolved OK");
             Task.run();
         });
     };

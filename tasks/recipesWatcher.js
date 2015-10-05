@@ -9,6 +9,9 @@
         lib.should.have.property('app');
         lib.app.tasks.run("fetchNamespaceRecipes");
 
+
+        lib.babylog.endCapture();
+
         http.response.setHeader("Content-Type", "text/html");
         http.response.write("Sent for update");
         http.response.end();

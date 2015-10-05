@@ -15,6 +15,13 @@
     ],
     "app": {
     	"port": "25600"
+    },
+    "babylog": {
+      "host": "localhost",
+      "port": "25601",
+      "token": "72834897325j20j3f28j39j",
+      "app": "Task Runner",
+      "log_level": false
     }
 
 }
