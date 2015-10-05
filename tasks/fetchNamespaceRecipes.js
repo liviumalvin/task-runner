@@ -30,15 +30,15 @@
 
             command.cwd = this.getNamespacePath(namespace.name);
             command.args = [
-                'clone',
-                namespace.url,
-                './' + namespace.name
-            ]
-        } else {
-            command.args = [
                 'pull',
                 'origin',
                 'master'
+            ];
+        } else {
+            command.args = [
+                'clone',
+                namespace.url,
+                './' + namespace.name
             ];
         }
 
