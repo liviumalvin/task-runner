@@ -22,21 +22,13 @@
             } catch (e) {
 
                 lib.data.auth = false;
-                lib.rollbar.handleErrorWithPayloadData("Authorized failed.", {
-                    level: "critical",
-                    custom: {
-                        error: e
-                    }
-                });
+                lib.babylog.fatal("Authorized failed.");
             }
 
             if (true === lib.data.auth) {
 
                 //Log the authorization ok
-                lib.rollbar.reportMessageWithPayloadData("Authorized. Starting the deployment process...", {
-                    level: "debug",
-                    custom: {}
-                });
+                lib.babylog.debug("Authorized. Starting the deployment process...");
 
                 lib.events.emit("resolve.namespace", lib.data.auth);
             }

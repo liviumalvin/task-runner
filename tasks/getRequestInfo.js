@@ -95,18 +95,9 @@
 
         //if there is any commit which should be deployed, launch the authorization process
         if (this.lib._.has(this.lib.data, 'commit')) {
-            this.lib.rollbar.reportMessageWithPayloadData("A new deploy was requested.Authorizing...", {
-                level: "debug",
-                custom: {
-                    namespace: this.lib.data.namespace,
-                    commit: {
-                        message: this.lib.data.commit.message
-                    }
-                }
-            });
+            this.lib.babylog.debug("A new deploy was requested.Authorizing...");
             this.lib.app.tasks.run("authorizeRequest");
         }
-
     };
 
     /**
@@ -144,7 +135,7 @@
                 http.response.write("Data incomplete.");
                 http.response.write(e.toString());
             }
-
+            Task.lib.babylog.endCapture();
             //End response
             http.response.end();
         });

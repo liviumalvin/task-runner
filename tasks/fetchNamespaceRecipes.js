@@ -22,18 +22,25 @@
     };
 
     Task.getNamespaceCommand = function (namespace) {
-        var command,
-            dir;
+        var command = {};
 
-        command = this.commands[this.action];
-        command = command.replace(":url", namespace.url)
-            .replace(":name", namespace.name);
 
-        dir = FS.realpathSync("./recipes");
+        command.cwd = FS.realpathSync("./recipes");
         if ('update' === this.action) {
-            dir = this.getNamespacePath(namespace.name);
+
+            command.cwd = this.getNamespacePath(namespace.name);
+            command.args = [
+                'clone',
+                namespace.url,
+                './' + namespace.name
+            ]
+        } else {
+            command.args = [
+                'pull',
+                'origin',
+                'master'
+            ];
         }
-        command = command.replace(":dir", dir);
 
         return command;
     };
@@ -42,6 +49,7 @@
         var namespace;
 
         if (0 === this.namespaces.length) {
+            Task.lib.babylog.updateRun("status", "finished");
             this.lib.events.emit("recipes.updated", {});
         }
 
@@ -64,28 +72,38 @@
      * @param namespace
      */
     Task.run = function (namespace) {
+        var nsTask,
+            command,
+            params,
+            nl2br = require("nl2br");
 
-        this.lib.rollbar.reportMessageWithPayloadData("[" + namespace.name + "]Fetching namespace recipes", {
-            level: "debug",
-            custom: {
-                namespace: namespace
-            }
+        params = this.getNamespaceCommand(namespace);
+
+        nsTask = this.lib.babylog.createTask('namespaceRecipesFetch',"[" + namespace.name + "] Git");
+        nsTask.feed("Launching spawn with command: " + JSON.stringify(params));
+
+        command = this.lib.spawn('git', params.args, {
+            cwd: params.cwd,
+            env: namespace.env
         });
 
-        this.lib.exec(this.getNamespaceCommand(namespace), function (error, stdout, stderr) {
+        command.on("error", function (error) {
+            nsTask.setData(error.toString());
+            nsTask.end();
+        });
 
-            Task.lib.rollbar.reportMessageWithPayloadData("[" + namespace.name + "] Recipes fetched", {
-                level: "debug",
-                custom: {
-                    stdout: stdout,
-                    stderr: stderr,
-                    error: error,
-                    namespace: namespace,
-                }
-            });
+        command.stdout.on("data", function (feed) {
+            nsTask.feed('STDOUT: ' + nl2br(feed));
+        });
+
+        command.stderr.on("data", function (feed) {
+            nsTask.feed('STDERR: ' + nl2br(feed));
+        });
+
+        command.on("close", function (code) {
+            nsTask.end();
 
             Task.fetchNamespaces();
-
         });
     };
 

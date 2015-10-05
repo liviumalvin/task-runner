@@ -10,7 +10,7 @@
 var App = require("./core.js"),
     Config = require("./configs/main.json"),
     Events = require('events'),
-    Rollbar = require('rollbar'),
+    Babylog = require('node-babylog'),
     Data = {},
     Storage = {
         log: [],
@@ -18,9 +18,10 @@ var App = require("./core.js"),
     };
 
 /**
- * Rollbar init
+ * Babylog instance
  */
-Rollbar.init(Config.rollbar.token, Config.rollbar.options);
+Babylog = Babylog.getNewInstance(Config.babylog);
+
 
 /**
  * Create events instance
@@ -36,10 +37,10 @@ App.shareResource('config', Config);
 App.shareResource('app', App);
 App.shareResource('storage', Storage);
 App.shareResource('data', Data);
-App.shareResource('rollbar', Rollbar);
+App.shareResource('babylog', Babylog);
 
 App.shareResource('_', require("lodash"));
-App.shareResource('exec', require("child_process").exec);
+App.shareResource('spawn', require("child_process").spawn);
 
 App.shareResource('http', App.tasks.add("createHttpResponder"));
 
@@ -62,12 +63,7 @@ App.tasks.run("createHttpResponder");
 
 //Handle uncaught
 process.on("uncaughtException", function (error) {
-    Rollbar.reportMessageWithPayloadData("An uncaught exception was finally caught: " + error.toString(), {
-        level: "critical",
-        custom: {
-            error: error.message,
-        }
-    });
+    Babylog.fatal("An uncaught exception was finally caught: " + error.toString());
 });
 
 

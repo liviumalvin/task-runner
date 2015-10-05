@@ -4,7 +4,7 @@
 		"body-parser": ">=1.2.0",
 	  	"should": "latest",
 		"lodash": "latest",
-		"rollbar": "latest"
+		"nl2br": "latest"
 	},
 	"name": "CI.Runner",
 	"description": "Continuos Integration Bot",
