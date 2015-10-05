@@ -17,10 +17,10 @@
     	"port": "25600"
     },
     "babylog": {
-      "host": "localhost",
+      "host": "qbyco.com",
       "port": "25601",
       "token": "72834897325j20j3f28j39j",
-      "app": "Task Runner",
+      "app": "MWD[T.R]",
       "log_level": false
     }
 
