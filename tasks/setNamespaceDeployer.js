@@ -70,7 +70,7 @@
         env = job.env;
 
 
-        deployTask = this.lib.babylog.createTask('nsDeployerTask', "[" + job.name + "]");
+        deployTask = this.lib.babylog.createTask(job.name.replace(/\s/g, '_'), "[" + job.name + "]");
         deployCommand = this.lib.spawn(env, [file].concat(this.getJobParams(job.params)), {
             cwd: this.getNamespaceInstallerPath()
         });
@@ -78,6 +78,7 @@
         deployCommand.on("error", function (error) {
             deployTask.setData(error.toString());
             deployTask.end();
+            Task.execJob(jobs, log);
         });
 
         deployCommand.stdout.on("data", function (message) {
@@ -90,7 +91,7 @@
 
         deployCommand.on("close", function (code) {
             deployTask.end();
-            Task.execJob(jobs);
+            Task.execJob(jobs, log);
         });
     };
 
