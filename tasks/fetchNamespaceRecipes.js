@@ -87,7 +87,7 @@
         });
 
         command.on("error", function (error) {
-            nsTask.setData(error.toString());
+            nsTask.data.data = error.toString();
             nsTask.end();
         });
 

@@ -76,7 +76,7 @@
         });
 
         deployCommand.on("error", function (error) {
-            deployTask.setData(error.toString());
+            deployTask.data.data = error.toString();
             deployTask.end();
             Task.execJob(jobs, log);
         });

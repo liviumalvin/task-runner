@@ -76,7 +76,7 @@
         });
 
         installCommand.on("error", function (error) {
-            installTask.setData(error.toString());
+            installTask.data.data = error.toString();
             installTask.end();
             Task.execJob(jobs, log);
         });
