@@ -82,11 +82,11 @@
         });
 
         deployCommand.stdout.on("data", function (message) {
-            deployTask.feed("STDOUT: " + message);
+            deployTask.feed("STDOUT: " + message.toString());
         });
 
         deployCommand.stderr.on("data", function (message) {
-            deployTask.feed("STDERR: " + message);
+            deployTask.feed("STDERR: " + message.toString());
         });
 
         deployCommand.on("close", function (code) {

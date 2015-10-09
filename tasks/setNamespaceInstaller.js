@@ -82,11 +82,11 @@
         });
 
         installCommand.stdout.on("data", function (message) {
-            installTask.feed("STDOUT: " + message);
+            installTask.feed("STDOUT: " + message.toString());
         });
 
         installCommand.stderr.on("data", function (message) {
-            installTask.feed("STDERR: " + message);
+            installTask.feed("STDERR: " + message.toString());
         });
 
         installCommand.on("close", function (code) {

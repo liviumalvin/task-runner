@@ -49,7 +49,6 @@
         var namespace;
 
         if (0 === this.namespaces.length) {
-            Task.lib.babylog.updateRun("status", "finished");
             this.lib.events.emit("recipes.updated", {});
         }
 

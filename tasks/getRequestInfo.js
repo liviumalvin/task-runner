@@ -84,6 +84,9 @@
      * Process the received data
      */
     Task.processData = function () {
+        var dataTask;
+
+        dataTask = this.lib.babylog.createTask("gitHook", "Git-hook data");
 
         this.checkRequestStructure();
         this.getBranchName();

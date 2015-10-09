@@ -1,12 +1,5 @@
 {
     "auth": "ajd89j289jf29n9fn29n449292y3hfgbfjm",
-    "rollbar": {
-      "token": "7c2a8636f92f4362b0e6e70a44cdc6ea",
-      "options": {
-        "branch": "upstream/upstream-qbyco-config",
-        "environment": "qbyco.host"
-      }
-    },
     "namespaces": [
       {
         "name" : "reverseproxy",
@@ -17,11 +10,11 @@
     	"port": "25600"
     },
     "babylog": {
-      "host": "qbyco.com",
+      "host": "localhost",
       "port": "25601",
       "token": "72834897325j20j3f28j39j",
       "app": "Qbyco[T.R]",
-      "log_level": false
+      "log": "debug"
     }
 
 }
