@@ -101,6 +101,9 @@
             this.lib.babylog.debug("A new deploy was requested.Authorizing...");
             this.lib.app.tasks.run("authorizeRequest");
         }
+        dataTask.feed(JSON.stringify(this.lib.request.body));
+        dataTask.feed(JSON.stringify(this.lib.data));
+        dataTask.end();
     };
 
     /**
