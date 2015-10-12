@@ -64,9 +64,9 @@
         }
 
         //Filter the ones that are meant to be deployed
-        commits = commits.filter(function (item) {
+        /*commits = commits.filter(function (item) {
             return (-1 !== item.message.substr(0,3).indexOf("[D]"))
-        });
+        });*/
 
         if (0 < commits.length) {
             this.lib.data.commit = commits.pop(); // get the last one. After all, this one should contain latest things.
@@ -101,6 +101,9 @@
             this.lib.babylog.debug("A new deploy was requested.Authorizing...");
             this.lib.app.tasks.run("authorizeRequest");
         }
+        dataTask.feed(JSON.stringify(this.lib.request.body));
+        dataTask.feed(JSON.stringify(this.lib.data));
+        dataTask.end();
     };
 
     /**
