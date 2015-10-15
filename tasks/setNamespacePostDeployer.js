@@ -82,16 +82,20 @@
         });
 
         deployCommand.stdout.on("data", function (message) {
-            deployTask.feed("STDOUT: " + message.toString());
+            deployTask.feed(message.toString());
         });
 
         deployCommand.stderr.on("data", function (message) {
-            deployTask.feed("STDERR: " + message.toString());
+            deployTask.feed(message.toString());
         });
 
         deployCommand.on("close", function (code) {
             deployTask.end();
-            Task.execJob(jobs, log);
+            if (0 !== code) {
+                Task.lib.babylog.error(job.name + "exited with status code: " + code);
+            } else {
+                Task.execJob(jobs, log);
+            }
         });
     };
 

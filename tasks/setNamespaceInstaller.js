@@ -82,16 +82,22 @@
         });
 
         installCommand.stdout.on("data", function (message) {
-            installTask.feed("STDOUT: " + message.toString());
+            installTask.feed(message.toString());
         });
 
         installCommand.stderr.on("data", function (message) {
-            installTask.feed("STDERR: " + message.toString());
+            installTask.feed(message.toString());
         });
 
         installCommand.on("close", function (code) {
             installTask.end();
-            Task.execJob(jobs, log);
+            if (0 !== code) {
+                Task.lib.babylog.error(job.name + "exited with status code: " + code);
+            } else {
+                Task.execJob(jobs, log);
+            }
+
+
         });
     };
 
