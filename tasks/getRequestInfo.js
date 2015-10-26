@@ -25,6 +25,7 @@
         this.lib.request.should.have.property("query");
 
         this.lib.request.body.should.have.property("repository");
+        this.lib.request.body.should.have.property("checkout_sha");
         this.lib.request.body.repository.should.have.property("name");
         this.lib.request.body.repository.should.have.property("url");
 
@@ -78,6 +79,7 @@
      */
     Task.getRepoData = function () {
         this.lib.data.repository =  this.lib.request.body.repository;
+        this.lib.data.checkout = this.lib.request.body.checkout_sha;
     };
 
     /**
