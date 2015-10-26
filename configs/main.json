@@ -3,7 +3,7 @@
     "namespaces": [
       {
         "name" : "mwd",
-        "url" : "git@gitlab:mwd/mwd-ci-recipes.git"
+        "url" : "git@gitlab:dev/mwd-ci-recipes.git"
       }
     ],
     "app": {
